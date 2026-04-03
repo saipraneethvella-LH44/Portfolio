@@ -693,7 +693,7 @@
   </ul>
   <div class="toggle-wrap">
     <span class="toggle-label" id="theme-label">DARK</span>
-    <button class="toggle" id="themeToggle" title="Toggle theme" aria-label="Toggle theme"></button>
+    <button class="toggle" id="themeToggle" title="Toggle theme" aria-label="Toggle theme" onclick="(function(){var h=document.documentElement,t=h.getAttribute('data-theme')=='dark'?'light':'dark';h.setAttribute('data-theme',t);document.getElementById('theme-label').textContent=t.toUpperCase();try{localStorage.setItem('spv-theme',t);}catch(e){}})()"></button>
   </div>
 </nav>
 
@@ -943,110 +943,36 @@
 </footer>
 
 <script>
-(function() {
-  // ── THEME TOGGLE ──
-  var htmlEl = document.documentElement;
-
-  function applyTheme(theme) {
-    htmlEl.setAttribute('data-theme', theme);
-    var lbl = document.getElementById('theme-label');
-    if (lbl) lbl.textContent = theme.toUpperCase();
-    try { localStorage.setItem('spv-theme', theme); } catch(e) {}
-  }
-
-  // Restore saved theme on load
+// Restore saved theme on page load
+(function(){
   try {
-    var saved = localStorage.getItem('spv-theme');
-    if (saved === 'light' || saved === 'dark') applyTheme(saved);
-  } catch(e) {}
-
-  // Attach toggle after DOM ready
-  function attachToggle() {
-    var btn = document.getElementById('themeToggle');
-    if (!btn) return;
-
-    function doToggle(e) {
-      e.preventDefault();
-      e.stopPropagation();
-      var current = htmlEl.getAttribute('data-theme') || 'dark';
-      applyTheme(current === 'dark' ? 'light' : 'dark');
+    var t = localStorage.getItem('spv-theme');
+    if(t==='light'||t==='dark'){
+      document.documentElement.setAttribute('data-theme',t);
+      var l=document.getElementById('theme-label');
+      if(l) l.textContent=t.toUpperCase();
     }
+  } catch(e){}
+})();
 
-    btn.addEventListener('click', doToggle, false);
-    btn.addEventListener('touchstart', function(e) {
-      e.preventDefault();
-    }, { passive: false });
-    btn.addEventListener('touchend', doToggle, { passive: false });
-  }
+// Scroll reveal
+document.addEventListener('DOMContentLoaded', function(){
+  var reveals = document.querySelectorAll('.reveal');
 
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', attachToggle);
-  } else {
-    attachToggle();
-  }
-
-  // ── SCROLL REVEAL ──
-  function revealAll() {
-    var els = document.querySelectorAll('.reveal');
-    els.forEach(function(el) { el.classList.add('visible'); });
-  }
-
-  function setupReveal() {
-    var reveals = document.querySelectorAll('.reveal');
-    if (!reveals.length) return;
-
-    // Fallback: if IntersectionObserver not supported, show everything
-    if (!('IntersectionObserver' in window)) {
-      revealAll();
-      return;
-    }
-
-    var observer = new IntersectionObserver(function(entries) {
-      entries.forEach(function(entry) {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('visible');
-          observer.unobserve(entry.target);
-        }
-      });
-    }, { threshold: 0.05, rootMargin: '0px 0px -10px 0px' });
-
-    reveals.forEach(function(el) { observer.observe(el); });
-
-    // Immediately reveal anything already in viewport
-    reveals.forEach(function(el) {
-      var rect = el.getBoundingClientRect();
-      if (rect.top < window.innerHeight + 50) {
+  function checkVisible(){
+    reveals.forEach(function(el){
+      if(el.classList.contains('visible')) return;
+      var r = el.getBoundingClientRect();
+      if(r.top < window.innerHeight + 50){
         el.classList.add('visible');
       }
     });
-
-    // Also catch elements on scroll
-    var ticking = false;
-    window.addEventListener('scroll', function() {
-      if (!ticking) {
-        requestAnimationFrame(function() {
-          reveals.forEach(function(el) {
-            if (!el.classList.contains('visible')) {
-              var rect = el.getBoundingClientRect();
-              if (rect.top < window.innerHeight - 10) {
-                el.classList.add('visible');
-              }
-            }
-          });
-          ticking = false;
-        });
-        ticking = true;
-      }
-    }, { passive: true });
   }
 
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', setupReveal);
-  } else {
-    setupReveal();
-  }
-
-})();
+  checkVisible();
+  window.addEventListener('scroll', checkVisible, {passive:true});
+  window.addEventListener('resize', checkVisible, {passive:true});
+});
 </script>
 </body>
 </html>
