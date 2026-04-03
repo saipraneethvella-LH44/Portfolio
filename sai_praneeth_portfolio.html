@@ -57,7 +57,7 @@
     overflow-x: hidden;
   }
 
-  /* GRID BACKGROUND — kept subtle under orbs */
+  /* GRID BACKGROUND */
   body::before {
     content: '';
     position: fixed;
@@ -69,7 +69,6 @@
     pointer-events: none;
     z-index: 0;
     transition: background 0.4s ease;
-    opacity: 0.5;
   }
 
   /* NAV */
@@ -701,11 +700,10 @@
 <main>
 
   <!-- HERO -->
-  <section id="hero" style="position:relative;">
-    <div id="orb-field" style="position:absolute;inset:0;pointer-events:none;z-index:0;overflow:hidden;"></div>
-    <p class="hero-eyebrow" style="position:relative;z-index:1;">Data Engineer · Denver, CO</p>
-    <h1 class="hero-name" style="position:relative;z-index:1;">Sai Praneeth<br><span class="accent">Vella</span></h1>
-    <p class="hero-title" style="position:relative;z-index:1;">
+  <section id="hero">
+    <p class="hero-eyebrow">Data Engineer · Denver, CO</p>
+    <h1 class="hero-name">Sai Praneeth<br><span class="accent">Vella</span></h1>
+    <p class="hero-title">
       ETL &amp; ELT Pipelines
       <span class="pipe">|</span>
       Python &amp; SQL
@@ -978,118 +976,6 @@ document.addEventListener('DOMContentLoaded', function(){
 </script>
 
 
-<script>
-(function(){
-  var field = document.getElementById('orb-field');
-  if(!field) return;
-
-  var dark = document.documentElement.getAttribute('data-theme') !== 'light';
-
-  var orbConfigs = [
-    { x:15, y:20, r:320, dx:0.25, dy:0.18, dark:'rgba(99,179,237,0.18)',  light:'rgba(37,99,235,0.13)'  },
-    { x:80, y:30, r:280, dx:-0.2, dy:0.22, dark:'rgba(79,209,197,0.15)',  light:'rgba(13,148,136,0.12)' },
-    { x:60, y:80, r:260, dx:0.18, dy:-0.2, dark:'rgba(246,173,85,0.14)',  light:'rgba(217,119,6,0.11)'  },
-  ];
-
-  // Create orb divs using CSS radial gradient + shape-outside float trick
-  // Each orb = a floated div with shape-outside:circle() so text wraps around it
-  var orbEls = orbConfigs.map(function(cfg, i) {
-    var el = document.createElement('div');
-    el.style.cssText = [
-      'position:absolute',
-      'border-radius:50%',
-      'pointer-events:none',
-      'transition:background 0.4s',
-    ].join(';');
-    el.dataset.idx = i;
-    field.appendChild(el);
-    return el;
-  });
-
-  // Also create shape-outside floats INSIDE the hero text flow
-  var hero = document.getElementById('hero');
-  var floats = orbConfigs.map(function(cfg, i) {
-    var fl = document.createElement('div');
-    fl.style.cssText = [
-      'width:0px', 'height:0px',
-      'float:left',
-      'shape-outside:circle(0px at 0px 0px)',
-      'pointer-events:none',
-    ].join(';');
-    hero.insertBefore(fl, hero.firstChild);
-    return fl;
-  });
-
-  var W, H, heroRect;
-  var orbs = orbConfigs.map(function(cfg) {
-    return { x: 0, y: 0, r: cfg.r, dx: cfg.dx, dy: cfg.dy, dark: cfg.dark, light: cfg.light };
-  });
-
-  function init() {
-    W = window.innerWidth;
-    H = window.innerHeight;
-    heroRect = hero.getBoundingClientRect();
-    orbs.forEach(function(o, i) {
-      o.x = W * orbConfigs[i].x / 100;
-      o.y = H * orbConfigs[i].y / 100;
-    });
-  }
-
-  var paused = false;
-  document.addEventListener('click', function(e) {
-    if(e.target.closest('#hero')) paused = !paused;
-  });
-
-  function update() {
-    dark = document.documentElement.getAttribute('data-theme') !== 'light';
-    heroRect = hero.getBoundingClientRect();
-
-    orbs.forEach(function(o, i) {
-      if(!paused) {
-        o.x += o.dx;
-        o.y += o.dy;
-        if(o.x < -o.r*0.3 || o.x > W + o.r*0.3) o.dx *= -1;
-        if(o.y < -o.r*0.3 || o.y > H + o.r*0.3) o.dy *= -1;
-      }
-
-      var color = dark ? o.dark : o.light;
-      var el = orbEls[i];
-      el.style.width  = o.r*2 + 'px';
-      el.style.height = o.r*2 + 'px';
-      el.style.left   = (o.x - o.r) + 'px';
-      el.style.top    = (o.y - o.r) + 'px';
-      el.style.background = 'radial-gradient(circle, ' + color + ' 0%, transparent 70%)';
-
-      // Update shape-outside float to make text reflow around this orb
-      var fl = floats[i];
-      var localX = o.x - heroRect.left;
-      var localY = o.y - heroRect.top;
-      var r = o.r * 0.6; // slightly tighter than visual radius
-
-      // Float side based on orb x position
-      if(localX < heroRect.width / 2) {
-        fl.style.float = 'left';
-        fl.style.width  = Math.max(0, localX + r) + 'px';
-        fl.style.height = Math.max(0, localY + r) + 'px';
-        fl.style.shapeOutside = 'circle(' + r + 'px at ' + localX + 'px ' + localY + 'px)';
-        fl.style.marginTop = Math.max(0, localY - r) + 'px';
-      } else {
-        fl.style.float = 'right';
-        var rx = heroRect.width - localX;
-        fl.style.width  = Math.max(0, rx + r) + 'px';
-        fl.style.height = Math.max(0, localY + r) + 'px';
-        fl.style.shapeOutside = 'circle(' + r + 'px at ' + rx + 'px ' + localY + 'px)';
-        fl.style.marginTop = Math.max(0, localY - r) + 'px';
-      }
-    });
-
-    requestAnimationFrame(update);
-  }
-
-  window.addEventListener('resize', init);
-  window.addEventListener('load', function() { init(); update(); });
-})();
-</script>
 
 </body>
 </html>
