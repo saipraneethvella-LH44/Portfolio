@@ -942,20 +942,111 @@
   &lt;/&gt; Built by Sai Praneeth Vella · Data Engineer · Denver, CO · 2025
 </footer>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
-  // Theme toggle
-  const toggle = document.getElementById('themeToggle');
-  const label = document.getElementById('theme-label');
-  const html = document.documentElement;
+<script>
+(function() {
+  // ── THEME TOGGLE ──
+  var htmlEl = document.documentElement;
 
-  toggle.addEventListener('click', () => {
-    const isDark = html.getAttribute('data-theme') === 'dark';
-    html.setAttribute('data-theme', isDark ? 'light' : 'dark');
-    label.textContent = isDark ? 'LIGHT' : 'DARK';
-  });
+  function applyTheme(theme) {
+    htmlEl.setAttribute('data-theme', theme);
+    var lbl = document.getElementById('theme-label');
+    if (lbl) lbl.textContent = theme.toUpperCase();
+    try { localStorage.setItem('spv-theme', theme); } catch(e) {}
+  }
 
-  // Scroll reveal
-  const reveals = document.querySelectorAll('.reveal');
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach((entry, i) => {
-      i
+  // Restore saved theme on load
+  try {
+    var saved = localStorage.getItem('spv-theme');
+    if (saved === 'light' || saved === 'dark') applyTheme(saved);
+  } catch(e) {}
+
+  // Attach toggle after DOM ready
+  function attachToggle() {
+    var btn = document.getElementById('themeToggle');
+    if (!btn) return;
+
+    function doToggle(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      var current = htmlEl.getAttribute('data-theme') || 'dark';
+      applyTheme(current === 'dark' ? 'light' : 'dark');
+    }
+
+    btn.addEventListener('click', doToggle, false);
+    btn.addEventListener('touchstart', function(e) {
+      e.preventDefault();
+    }, { passive: false });
+    btn.addEventListener('touchend', doToggle, { passive: false });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', attachToggle);
+  } else {
+    attachToggle();
+  }
+
+  // ── SCROLL REVEAL ──
+  function revealAll() {
+    var els = document.querySelectorAll('.reveal');
+    els.forEach(function(el) { el.classList.add('visible'); });
+  }
+
+  function setupReveal() {
+    var reveals = document.querySelectorAll('.reveal');
+    if (!reveals.length) return;
+
+    // Fallback: if IntersectionObserver not supported, show everything
+    if (!('IntersectionObserver' in window)) {
+      revealAll();
+      return;
+    }
+
+    var observer = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.05, rootMargin: '0px 0px -10px 0px' });
+
+    reveals.forEach(function(el) { observer.observe(el); });
+
+    // Immediately reveal anything already in viewport
+    reveals.forEach(function(el) {
+      var rect = el.getBoundingClientRect();
+      if (rect.top < window.innerHeight + 50) {
+        el.classList.add('visible');
+      }
+    });
+
+    // Also catch elements on scroll
+    var ticking = false;
+    window.addEventListener('scroll', function() {
+      if (!ticking) {
+        requestAnimationFrame(function() {
+          reveals.forEach(function(el) {
+            if (!el.classList.contains('visible')) {
+              var rect = el.getBoundingClientRect();
+              if (rect.top < window.innerHeight - 10) {
+                el.classList.add('visible');
+              }
+            }
+          });
+          ticking = false;
+        });
+        ticking = true;
+      }
+    }, { passive: true });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', setupReveal);
+  } else {
+    setupReveal();
+  }
+
+})();
+</script>
+</body>
+</html>
