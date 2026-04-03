@@ -117,31 +117,45 @@
   .nav-links a:hover { color: var(--accent); }
 
   /* THEME TOGGLE */
-  .toggle-wrap {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-  }
+
   .toggle-label { font-size: 0.7rem; color: var(--text3); letter-spacing: 0.05em; }
   .toggle {
-    width: 44px; height: 24px;
+    width: 48px; height: 28px;
     background: var(--toggle-bg);
-    border-radius: 12px;
+    border-radius: 14px;
     cursor: pointer;
     position: relative;
     border: 1px solid var(--border);
     transition: background 0.3s;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+    user-select: none;
+    -webkit-user-select: none;
+    outline: none;
+    appearance: none;
+    -webkit-appearance: none;
+    padding: 0;
+    display: block;
+    min-width: 48px;
+    min-height: 28px;
   }
   .toggle::after {
     content: '';
     position: absolute;
-    top: 3px; left: 3px;
-    width: 16px; height: 16px;
+    top: 4px; left: 4px;
+    width: 18px; height: 18px;
     background: var(--accent);
     border-radius: 50%;
     transition: transform 0.3s ease;
+    pointer-events: none;
   }
   [data-theme="light"] .toggle::after { transform: translateX(20px); }
+  .toggle-wrap {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    -webkit-tap-highlight-color: transparent;
+  }
 
   /* MAIN LAYOUT */
   main {
@@ -642,8 +656,27 @@
     .nav-links { display: none; }
     .projects-grid { grid-template-columns: 1fr; }
     .edu-grid { grid-template-columns: 1fr; }
-    .contact-box { padding: 2rem; }
-    .hero-stats { gap: 2rem; }
+    .skills-grid { grid-template-columns: 1fr; }
+    .contact-box { padding: 1.5rem; flex-direction: column; }
+    .hero-stats { gap: 1.5rem; flex-wrap: wrap; }
+    main { padding: 0 1.25rem; }
+    .hero-name { font-size: clamp(2.5rem, 12vw, 4rem); }
+    .hero-title { font-size: 0.82rem; }
+    .exp-card { padding: 1.25rem; }
+    .project-card { padding: 1.25rem; }
+    section { padding: 3.5rem 0; }
+    .exp-header { flex-direction: column; gap: 0.4rem; }
+    .hero-stats .stat-num { font-size: 1.6rem; }
+    .contact-box { padding: 1.5rem; }
+    .section-title { font-size: 1.6rem; }
+    body { overflow-x: hidden; }
+  }
+
+  @media (max-width: 480px) {
+    .hero-title { font-size: 0.72rem; flex-wrap: wrap; }
+    .toggle-label { display: none; }
+    nav { padding: 0 1rem; }
+    .nav-logo { font-size: 1rem; }
   }
 </style>
 </head>
@@ -660,7 +693,7 @@
   </ul>
   <div class="toggle-wrap">
     <span class="toggle-label" id="theme-label">DARK</span>
-    <div class="toggle" id="themeToggle" title="Toggle theme"></div>
+    <button class="toggle" id="themeToggle" title="Toggle theme" aria-label="Toggle theme"></button>
   </div>
 </nav>
 
