@@ -702,8 +702,8 @@
         <div class="stat-label">Cloud Platforms</div>
       </div>
       <div>
-        <div class="stat-num">500K+</div>
-        <div class="stat-label">Daily Events Processed</div>
+        <div class="stat-num">50K+</div>
+        <div class="stat-label">Test Records Processed</div>
       </div>
     </div>
   </section>
@@ -805,36 +805,36 @@
       <div class="project-card reveal">
         <div class="project-num">PROJECT_01</div>
         <div class="project-title">Real-Time E-Commerce Data Pipeline &amp; Analytics Platform</div>
-        <div class="project-desc">End-to-end streaming pipeline ingesting, transforming, and serving real-time e-commerce transaction data for BI and fraud detection.</div>
+        <div class="project-desc">End-to-end streaming pipeline built locally with Docker — ingests simulated e-commerce events through Kafka, transforms with PySpark, and serves analytics via Snowflake + dbt.</div>
         <div class="project-stack">
           <span class="stack-tag">Python</span><span class="stack-tag">Apache Kafka</span><span class="stack-tag">PySpark</span>
           <span class="stack-tag">Snowflake</span><span class="stack-tag">dbt</span><span class="stack-tag">AWS S3</span>
           <span class="stack-tag">AWS EMR</span><span class="stack-tag">Airflow</span>
         </div>
         <ul class="project-highlights">
-          <li>Kafka pipeline streaming <strong>500K+ daily events</strong> into centralized AWS S3 data lake</li>
-          <li>PySpark jobs on EMR reduced data processing time by <strong>60%</strong> vs legacy SQL batch</li>
-          <li>dbt dimensional models cut ad-hoc query turnaround from <strong>days to minutes</strong></li>
-          <li>Airflow orchestration achieved <strong>99.5% pipeline uptime</strong>, eliminating manual intervention</li>
-          <li>dbt data quality checks catching <strong>98% of upstream anomalies</strong> pre-reporting</li>
+          <li>Kafka ingestion pipeline consuming simulated e-commerce events — <strong>validated end-to-end</strong> in local Docker environment</li>
+          <li>PySpark jobs benchmarked against Pandas/SQL — <strong>measurably faster</strong> on 50K–100K record datasets</li>
+          <li>Snowflake star schema with dbt — <strong>sub-second query performance</strong> on loaded test datasets</li>
+          <li>Airflow DAGs with retry logic and alerting — <strong>full pipeline runs successfully</strong> end-to-end locally</li>
+          <li>dbt schema + singular tests catching <strong>nulls, duplicate keys, and referential integrity</strong> issues upstream</li>
         </ul>
       </div>
 
       <div class="project-card reveal">
         <div class="project-num">PROJECT_02</div>
         <div class="project-title">Multi-Cloud Patient Health Data Warehouse &amp; ETL Framework</div>
-        <div class="project-desc">Scalable ETL framework consolidating fragmented patient records from disparate hospital systems into a unified cloud warehouse for population health analytics.</div>
+        <div class="project-desc">ETL framework built with synthetic patient data (Faker) — consolidates multi-source records into a Redshift data warehouse with a fully documented multi-cloud orchestration architecture.</div>
         <div class="project-stack">
           <span class="stack-tag">Python</span><span class="stack-tag">PostgreSQL</span><span class="stack-tag">MongoDB</span>
           <span class="stack-tag">Amazon Redshift</span><span class="stack-tag">GCP Dataflow</span>
           <span class="stack-tag">Azure Data Factory</span><span class="stack-tag">dbt</span>
         </div>
         <ul class="project-highlights">
-          <li>ETL framework standardizing <strong>10+ schemas</strong> into a unified canonical data model</li>
-          <li>Redshift star-schema warehouse — sub-10s queries across <strong>1M+ patient records</strong> (<strong>4x improvement</strong>)</li>
-          <li>Vendor-agnostic multi-cloud architecture (GCP + Azure + AWS) reducing cloud lock-in risk</li>
-          <li>Data masking &amp; encryption ensuring full <strong>regulatory compliance</strong> for sensitive data</li>
-          <li>GCP Pub/Sub alerting reduced pipeline MTTD from <strong>4 hours to &lt;10 minutes</strong></li>
+          <li>Python ETL consolidating <strong>4 source schemas</strong> (PostgreSQL, MongoDB, REST APIs) into a single canonical model</li>
+          <li>Redshift star schema — <strong>validated query performance</strong> across fact &amp; dimension tables on synthetic datasets</li>
+          <li>Multi-cloud blueprint: GCP Dataflow + Azure Data Factory — <strong>fully documented with pipeline diagrams</strong></li>
+          <li>Field-level PII masking (name, DOB, SSN) using <strong>AWS KMS-aligned encryption patterns</strong></li>
+          <li>GCP Pub/Sub alerting module — <strong>tested with simulated failure injection</strong> scenarios</li>
         </ul>
       </div>
 
@@ -880,12 +880,12 @@
     <div class="contact-box reveal">
       <div class="contact-text">
         <h3>Let's build something great.</h3>
-        <p>Open to mid-level Data Engineer roles. I bring hands-on experience with Spark, Kafka, dbt, Snowflake, Redshift, and multi-cloud pipelines across AWS, GCP, and Azure.</p>
+        <p>Open to mid-level Data Engineer roles. I bring hands-on project experience with Spark, Kafka, dbt, Snowflake, Redshift, and multi-cloud pipeline architecture across AWS, GCP, and Azure — backed by Google, AWS, and dbt certifications.</p>
       </div>
       <div class="contact-links">
-        <a href="mailto:saipraneethvella@gmail.com" class="contact-item">
+        <a href="/cdn-cgi/l/email-protection#c3b0a2aab3b1a2ada6a6b7abb5a6afafa283a4aea2aaafeda0acae" class="contact-item">
           <div class="contact-icon">@</div>
-          saipraneethvella@gmail.com
+          <span class="__cf_email__" data-cfemail="d9aab8b0a9abb8b7bcbcadb1afbcb5b5b899beb4b8b0b5f7bab6b4">[email&#160;protected]</span>
         </a>
         <a href="tel:7203829387" class="contact-item">
           <div class="contact-icon">☎</div>
@@ -909,7 +909,7 @@
   &lt;/&gt; Built by Sai Praneeth Vella · Data Engineer · Denver, CO · 2025
 </footer>
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
   // Theme toggle
   const toggle = document.getElementById('themeToggle');
   const label = document.getElementById('theme-label');
@@ -925,13 +925,4 @@
   const reveals = document.querySelectorAll('.reveal');
   const observer = new IntersectionObserver((entries) => {
     entries.forEach((entry, i) => {
-      if (entry.isIntersecting) {
-        setTimeout(() => entry.target.classList.add('visible'), i * 80);
-        observer.unobserve(entry.target);
-      }
-    });
-  }, { threshold: 0.1 });
-  reveals.forEach(el => observer.observe(el));
-</script>
-</body>
-</html>
+      i
